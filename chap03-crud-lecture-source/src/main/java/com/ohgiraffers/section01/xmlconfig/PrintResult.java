@@ -15,6 +15,8 @@ public class PrintResult {
             case "selectList" : errorMessage = "메뉴 목록 조회 실패"; break;
             case "selectOne" : errorMessage = "메뉴 조회 실패"; break;
             case "insert" : errorMessage = "신규메뉴 등록 실패"; break;
+            case "update" : errorMessage = "메뉴 수정 실패"; break;
+            case "delete" : errorMessage = "메뉴 삭제 실패"; break;
         }
         System.out.println(errorMessage);
     }
@@ -27,6 +29,8 @@ public class PrintResult {
         String successMessage = "";
         switch (successCode){
             case "insert" : successMessage = "신규메뉴 등록 성공"; break;
+            case "update" : successMessage = "메뉴 수정 성공"; break;
+            case "delete" : successMessage = "메뉴 삭제 성공"; break;
         }
         System.out.println(successMessage);
     }

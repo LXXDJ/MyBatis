@@ -29,4 +29,15 @@
         INSERT INTO TBL_MENU (MENU_NAME, MENU_PRICE, CATEGORY_CODE, ORDERABLE_STATUS)
         VALUES (#{name}, #{price}, #{categoryCode}, 'Y')
     </insert>
+
+    <update id="updateMenu" parameterType="com.ohgiraffers.section01.xmlconfig.MenuDTO">
+        UPDATE TBL_MENU
+        SET MENU_NAME = #{name}, MENU_PRICE = #{price}, CATEGORY_CODE = #{categoryCode}
+        WHERE MENU_CODE = #{code}
+    </update>
+
+    <delete id="deleteMenu" parameterType="_int">
+        DELETE FROM TBL_MENU
+        WHERE MENU_CODE = #{code}
+    </delete>
 </mapper>

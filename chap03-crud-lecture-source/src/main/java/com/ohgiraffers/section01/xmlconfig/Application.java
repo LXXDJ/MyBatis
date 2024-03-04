@@ -20,8 +20,8 @@ public class Application {
                 case 1 : menuController.selectAllMenu(); break;
                 case 2 : menuController.selectMenuByCode(inputMenuCode()); break;
                 case 3 : menuController.registMenu(inputMenu()); break;
-                case 4 :
-                case 5 :
+                case 4 : menuController.modifyMenu(inputModifyMenu()); break;
+                case 5 : menuController.deleteMenu(inputMenuCode()); break;
                 default:
                     System.out.println("잘못된 메뉴를 선택하셨습니다.");
                     break;
@@ -50,6 +50,26 @@ public class Application {
         String categoryCode = sc.nextLine();
 
         Map<String, String> parameter = new HashMap<>();
+        parameter.put("name", name);
+        parameter.put("price", price);
+        parameter.put("categoryCode", categoryCode);
+
+        return parameter;
+    }
+
+    private static Map<String, String> inputModifyMenu() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("수정할 메뉴코드 입력 : ");
+        String code = sc.nextLine();
+        System.out.print("수정할 메뉴이름 입력 : ");
+        String name = sc.nextLine();
+        System.out.print("수정할 메뉴가격 입력 : ");
+        String price = sc.nextLine();
+        System.out.print("수정할 카테고리코드 입력 : ");
+        String categoryCode = sc.nextLine();
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("code", code);
         parameter.put("name", name);
         parameter.put("price", price);
         parameter.put("categoryCode", categoryCode);
