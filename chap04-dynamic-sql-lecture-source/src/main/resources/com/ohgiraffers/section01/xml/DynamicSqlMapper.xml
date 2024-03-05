@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.section01.xml.DynamicSqlMapper">
+    <resultMap id="menuResultMap" type="com.ohgiraffers.section01.xml.MenuDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+    </resultMap>
+    <!--
+        <if> 태그는 test 속성의 조건에 해당될 때만 엘리먼트 구문을 쿼리에 포함한다.
+        OGNL(Object Graph Navigation Language)
+        : single quotation('') 구간의 값은 리터럴값(데이터값, 그자체)으로 보고, 그게 아닌 이름은 객체 필드 또는 변수로 인식하게 작성하는 기법
+    -->
+    <select id="selectMenuByPrice" parameterType="hashmap" resultMap="menuResultMap">
+        SELECT A.MENU_CODE, A.MENU_NAME, A.MENU_PRICE, A.CATEGORY_CODE, A.ORDERABLE_STATUS
+        FROM TBL_MENU A
+        WHERE A.ORDERABLE_STATUS = 'Y'
+        <if test="price gte 0 and price lte 10000">
+            <![CDATA[ AND A.MENU_PRICE < #{price} ]]>
+        </if>
+        <if test="price gt 10000 and price lte 20000">
+            AND A.MENU_PRICE BETWEEN 10000 AND #{price}
+        </if>
+        <if test="price gt 20000 and price lte 30000">
+            AND A.MENU_PRICE BETWEEN 20000 AND #{price}
+        </if>
+        <if test="price gt 30000">
+            AND A.MENU_PRICE BETWEEN 30000 AND #{price}
+        </if>
+        ORDER BY A.MENU_CODE
+    </select>
+    <select id="searchMenu" parameterType="SearchCriteria" resultMap="menuResultMap">
+        SELECT A.MENU_CODE, A.MENU_NAME, A.MENU_PRICE, A.CATEGORY_CODE, A.ORDERABLE_STATUS
+        FROM TBL_MENU A
+        <if test="condition == 'category'">
+            JOIN TBL_CATEGORY B ON (A.CATEGORY_CODE = B.CATEGORY_CODE)
+        </if>
+        WHERE A.ORDERABLE_STATUS = 'Y'
+        <if test="condition == 'name'">
+            AND A.MENU_NAME LIKE CONCAT('%', #{value}, '%')
+        </if>
+        <if test="condition == 'category'">
+            AND B.CATEGORY_NAME = #{value}
+        </if>
+        ORDER BY A.MENU_CODE
+    </select>
+    <!--
+        <when> 태그는 test 속성 조건에 부합하면 when 엘리먼트 구문을 쿼리에 포함한다.
+        어떠한 when 조건도 만족하지 못하면 otherwise 엘리먼트 구문을 쿼리에 포함한다.
+    -->
+    <select id="searchMenuBySuperCategory" parameterType="SearchCriteria" resultMap="menuResultMap">
+        SELECT A.MENU_CODE, A.MENU_NAME, A.MENU_PRICE, A.CATEGORY_CODE, A.ORDERABLE_STATUS
+        FROM TBL_MENU A
+        WHERE A.ORDERABLE_STATUS = 'Y'
+        <choose>
+            <when test="value == '식사'">
+                AND A.CATEGORY_CODE IN (4,5,6,7)
+            </when>
+            <when test="value == '음료'">
+                AND A.CATEGORY_CODE IN (8,9,10)
+            </when>
+            <otherwise>
+                AND A.CATEGORY_CODE IN (11,12)
+            </otherwise>
+        </choose>
+        ORDER BY A.MENU_CODE
+    </select>
+    <!--
+        <foreach> 태그는 Java의 for문과 같은 역할
+        1. collection 속성 : 반복을 수행할 대상
+        2. item : 반복을 수행할 때마다 꺼내올 값의 이름 설정
+        3. open : <foreach> 엘리먼트 구문의 가장 앞에 올 문자
+        4. separator : 반복이 수행될 때 꺼내온 item 사이에 들어갈 문자
+        5. close : 엘리먼트 구문의 마지막에 올 문자
+    -->
+    <select id="searchMenubyRandomMenuCode" parameterType="hashmap" resultMap="menuResultMap">
+        SELECT A.MENU_CODE, A.MENU_NAME, A.MENU_PRICE, A.CATEGORY_CODE, A.ORDERABLE_STATUS
+        FROM TBL_MENU A
+        WHERE A.MENU_CODE IN
+        <foreach collection="randomMenuCodeList" item="menuCode" open="(" separator=", " close=")">
+            #{menuCode}
+        </foreach>
+    </select>
+</mapper>
