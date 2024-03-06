@@ -12,6 +12,7 @@ public class MenuService {
     private DynamicSqlMapper mapper;
     public void selectMenuByPrice(int price) {
         SqlSession sqlSession = getSqlSession();
+        // sqlSession이 jdbc에서 Connection과 동일한 역할, 통로를 만들어줌
         mapper = sqlSession.getMapper(DynamicSqlMapper.class);
 
         Map<String, Integer> map = new HashMap<>();
@@ -79,6 +80,57 @@ public class MenuService {
             }
         }else{
             System.out.println("검색 결과 없음");
+        }
+
+        sqlSession.close();
+    }
+
+    public void searchMenuByCodeOrSearchAll(SearchCriteria searchCriteria) {
+        SqlSession sqlSession = getSqlSession();
+        mapper = sqlSession.getMapper(DynamicSqlMapper.class);
+
+        List<MenuDTO> menuList = mapper.searchMenuByCodeOrSearchAll(searchCriteria);
+
+        if(menuList != null && menuList.size() > 0){
+            for (MenuDTO menu : menuList){
+                System.out.println(menu);
+            }
+        }else{
+            System.out.println("검색 결과 없음");
+        }
+
+        sqlSession.close();
+    }
+
+    public void searchMenuByNameOrCategory(Map<String, Object> criteria) {
+        SqlSession sqlSession = getSqlSession();
+        mapper = sqlSession.getMapper(DynamicSqlMapper.class);
+
+        List<MenuDTO> menuList = mapper.searchMenuByNameOrCategory(criteria);
+
+        if(menuList != null && menuList.size() > 0){
+            for (MenuDTO menu : menuList){
+                System.out.println(menu);
+            }
+        }else{
+            System.out.println("검색 결과 없음");
+        }
+
+        sqlSession.close();
+    }
+
+    public void modifyMenu(Map<String, Object> criteria) {
+        SqlSession sqlSession = getSqlSession();
+        mapper = sqlSession.getMapper(DynamicSqlMapper.class);
+
+        int result = mapper.modifyMenu(criteria);
+
+        if(result > 0){
+            System.out.println("메뉴정보 변경 성공");
+            sqlSession.commit();
+        }else{
+            System.out.println("메뉴정보 변경 실패");
+            sqlSession.rollback();
         }
 
         sqlSession.close();

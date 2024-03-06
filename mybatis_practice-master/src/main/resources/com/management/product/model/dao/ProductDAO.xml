@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.management.product.model.dao.ProductDAO">
+
+    <resultMap id="productResultMap" type="com.management.product.model.dto.ProductDTO">
+        <id property="productCode" column="PRODUCT_CODE"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="originCost" column="ORIGIN_COST"/>
+        <result property="releaseDate" column="RELEASE_DATE"/>
+        <result property="discountRate" column="DISCOUNT_RATE"/>
+        <result property="salesQuantity" column="SALES_QUANTITY"/>
+        <result property="stockQuantity" column="STOCK_QUANTITY"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="productionStatus" column="PRODUCTION_STATUS"/>
+    </resultMap>
+
+    <select id="selectAllProductList" resultMap="productResultMap">
+        SELECT * FROM PRODUCT_INFO
+    </select>
+
+    <!-- 4. 조건에 따른 목록을 조회하는 쿼리를 작성하세요.
+            (쿼리id) selectProductByCondition
+            (참고 1) 제품명 조회인 경우, 검색어를 '포함'한 모든 제품을 조회합니다.
+                     (예시) '솔' 검색 -> 솔방울, 칫솔 등 '솔' 포함 제품 모두 조회
+            (참고 2) 판매점 유형별 조회의 경우,
+                     '백화점'이면 할인율이 0%인 제품, '아울렛'이면 할인율이 1% 이상인 제품을 조회합니다.
+            (참고 3) 이달의 신상품 조희의 경우, 출시일이 이번 달인 제품(예를 들어, 현재 기준이면 2023년 5월 출시 제품)울 조회합니다. -->
+    <select id="selectProductByCondition" parameterType="com.common.SearchCondition" resultMap="productResultMap">
+        SELECT * FROM PRODUCT_INFO
+        <where>
+            <if test="option == 'productName'">
+                PRODUCT_NAME LIKE CONCAT('%', #{value} , '%')
+            </if>
+            <if test="option == 'salesStore' and value == '백화점'">
+                DISCOUNT_RATE == 0
+            </if>
+            <if test="option == 'salesStore' and value == '아울렛'">
+                DISCOUNT_RATE >= 1
+            </if>
+            <if test="option == 'newProduct'">
+                SUBSTRING(RELEASE_DATE, 5, 2) = SUBSTRING(CURDATE(), 6, 2);
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertProduct" parameterType="com.management.product.model.dto.ProductDTO">
+        INSERT INTO PRODUCT_INFO (PRODUCT_NAME, ORIGIN_COST, RELEASE_DATE, DISCOUNT_RATE, SALES_QUANTITY, STOCK_QUANTITY, CATEGORY_CODE, PRODUCTION_STATUS)
+        VALUES (#{productName},#{originCost},#{releaseDate},#{discountRate},#{salesQuantity},#{stockQuantity},#{categoryCode},'Y')
+    </insert>
+
+    <update id="modifyProductInfo" parameterType="com.management.product.model.dto.ProductDTO">
+        UPDATE PRODUCT_INFO
+        SET PRODUCT_NAME = #{productName}, ORIGIN_COST = #{originCost}, RELEASE_DATE = #{releaseDate}, DISCOUNT_RATE = #{discountRate}, SALES_QUANTITY = #{salesQuantity}, STOCK_QUANTITY = #{stockQuantity}, CATEGORY_CODE = #{categoryCode}
+        WHERE PRODUCT_CODE = #{productCode}
+    </update>
+
+    <delete id="deleteProduct" parameterType="com.management.product.model.dto.ProductDTO">
+        DELETE FROM PRODUCT_INFO
+        WHERE PRODUCT_CODE = #{productCode}
+    </delete>
+</mapper>

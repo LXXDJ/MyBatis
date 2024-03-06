@@ -1,4 +1,4 @@
-package com.ohgiraffers.section01.xml;
+package com.ohgiraffers.common;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
