@@ -3,31 +3,41 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- * 주석을 지우고 각각 알맞은 태그를 활용하여 내용을 작성하세요. -->
+<mapper namespace="com.management.category.model.dao.CategoryDAO">
 
-<!-- 1. namesapce 설정을 알맞게 지정하세요. -->
-<mapper namespace="com.management.category.model.dao.categoryDAO">
-
-    <!-- 2. CategoryDTO type의 resultMap을 설정하세요. -->
-
-
+    <resultMap id="categoryResultMap" type="com.management.category.model.dto.CategoryDTO">
+        <id property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="categoryName" column="CATEGORY_NAME"/>
+    </resultMap>
     <!--3. 조건에 따른 제품분류 목록을 조회하는 쿼리를 작성하세요.
         (쿼리id) selectCategoryList
         (조건) 전체 조회 or 제품분류 순위로 정렬해 조회하는 조건에 따른 Dynamic SQL로 작성하세요.
             제품분류 순위는 PRODUCT_INFO 테이블과 JOIN하여, 해당 제품분류에 속한 제품 갯수가 많은 순입니다.
             예를 들어, PRODUCT_INFO 테이블에 제품분류가 A인 제품이 10개, B인 제품이 4개, C인 제품이 13개 있다면
             제품분류 순위는 C > A > B 입니다. (단, 제품 갯수가 0개인 제품분류는 목록에 출력되지 않아도 됩니다.) -->
+    <select id="selectCategoryList" resultMap="categoryResultMap">
+        SELECT CATEGORY_CODE, CATEGORY_NAME
+        FROM PRODUCT_CATEGORY
+        <if test="option == 'orderList'">
+            JOIN PRODUCT_INFO USING (CATEGORY_CODE)
+            GROUP BY CATEGORY_CODE
+            ORDER BY COUNT(CATEGORY_NAME) DESC
+        </if>
+    </select>
 
+    <insert id="registNewCategory" parameterType="com.management.category.model.dto.CategoryDTO">
+        INSERT INTO PRODUCT_CATEGORY (CATEGORY_NAME)
+        VALUES (#{categoryName})
+    </insert>
 
-    <!-- 4. 제품분류를 등록하는 코드를 작성하세요.
-        (쿼리id) insertCategory -->
+    <update id="modifyCategoryName" parameterType="com.management.category.model.dto.CategoryDTO">
+        UPDATE PRODUCT_CATEGORY
+        SET CATEGORY_NAME = #{categoryName}
+        WHERE CATEGORY_CODE = #{categoryCode}
+    </update>
 
-
-    <!-- 5. 제품분류명을 수정하는 코드를 작성하세요.
-        (쿼리id) updateCategory -->
-
-
-    <!-- 6. 제품분류를 삭제하는 코드를 작성하세요.
-        (쿼리id) deleteCategory -->
-
+    <delete id="deleteCategory" parameterType="com.management.category.model.dto.CategoryDTO">
+        DELETE FROM PRODUCT_CATEGORY
+        WHERE CATEGORY_CODE = #{categoryCode}
+    </delete>
 </mapper>

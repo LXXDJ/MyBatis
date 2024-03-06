@@ -91,9 +91,5 @@ public class ProductController {
         }else{
             productPrint.printErrorMessage("delete");
         }
-        // 6. 제품 정보를 삭제하는 메소드
-        //    (조건 1) Service 객체를 호출하여 수정을 수행하고, 결과를 boolean 값으로 return 받으세요.
-        //    (조건 2) delete가 정상적으로 수행된 경우, Print 객체를 통해 삭제 성공했다는 성공 메세지를 출력하세요.
-        //    (조건 3) delete가 정상적으로 수행되지 않은 경우, Print 객체를 통해 삭제 실패했다는 오류 메세지를 출력하세요.
     }
 }

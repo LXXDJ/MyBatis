@@ -35,13 +35,16 @@
                 PRODUCT_NAME LIKE CONCAT('%', #{value} , '%')
             </if>
             <if test="option == 'salesStore' and value == '백화점'">
-                DISCOUNT_RATE == 0
+                DISCOUNT_RATE = 0
             </if>
             <if test="option == 'salesStore' and value == '아울렛'">
                 DISCOUNT_RATE >= 1
             </if>
             <if test="option == 'newProduct'">
                 SUBSTRING(RELEASE_DATE, 5, 2) = SUBSTRING(CURDATE(), 6, 2);
+            </if>
+            <if test="option == 'nonProduction'">
+                PRODUCTION_STATUS = 'N'
             </if>
         </where>
     </select>
