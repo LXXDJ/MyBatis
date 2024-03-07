@@ -16,7 +16,7 @@
     </environments>
     
     <mappers>
-<!--        <package name="com.management.product.model.dao"/>-->
+        <package name="com.management.product.model.dao"/>
         <package name="com.management.category.model.dao"/>
     </mappers>
 </configuration>

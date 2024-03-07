@@ -69,6 +69,7 @@ public class ProductController {
 
     public void modifyProductInfo(ProductDTO product) {
         String releaseDate = product.getReleaseDate().replaceAll("-","");
+        product.setReleaseDate(releaseDate);
 
         if(productService.modifyProductInfo(product)){
             productPrint.printSuccessMessage("update");

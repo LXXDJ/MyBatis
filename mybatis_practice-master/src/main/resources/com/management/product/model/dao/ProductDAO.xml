@@ -56,7 +56,32 @@
 
     <update id="modifyProductInfo" parameterType="com.management.product.model.dto.ProductDTO">
         UPDATE PRODUCT_INFO
-        SET PRODUCT_NAME = #{productName}, ORIGIN_COST = #{originCost}, RELEASE_DATE = #{releaseDate}, DISCOUNT_RATE = #{discountRate}, SALES_QUANTITY = #{salesQuantity}, STOCK_QUANTITY = #{stockQuantity}, CATEGORY_CODE = #{categoryCode}
+        <set>
+            <if test="productName != 'SKIP'">
+                PRODUCT_NAME = #{productName}
+            </if>
+            <if test="originCost != 'SKIP'">
+                , ORIGIN_COST = #{originCost}
+            </if>
+            <if test="releaseDate != 'SKIP'">
+                , RELEASE_DATE = #{releaseDate}
+            </if>
+            <if test="discountRate != 'SKIP'">
+                , DISCOUNT_RATE = #{discountRate}
+            </if>
+            <if test="salesQuantity != 'SKIP'">
+                , SALES_QUANTITY = #{salesQuantity}
+            </if>
+            <if test="stockQuantity != 'SKIP'">
+                , STOCK_QUANTITY = #{stockQuantity}
+            </if>
+            <if test="categoryCode != 'SKIP'">
+                , CATEGORY_CODE = #{categoryCode}
+            </if>
+            <if test="productionStatus != 'SKIP'">
+                , PRODUCTION_STATUS = #{productionStatus}
+            </if>
+        </set>
         WHERE PRODUCT_CODE = #{productCode}
     </update>
 
