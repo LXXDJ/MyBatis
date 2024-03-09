@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="stock.model.dao.StockDAO">
+    <resultMap id="memberResultMap" type="stock.model.dto.MemDTO">
+        <id property="id" column="MEM_ID"/>
+        <result property="name" column="MEM_NAME"/>
+        <result property="money" column="MEM_MONEY"/>
+    </resultMap>
+    <resultMap id="stockResultMap" type="stock.model.dto.StockDTO">
+        <id property="title" column="STK_NAME"/>
+        <result property="price" column="STK_PRICE"/>
+    </resultMap>
+    <resultMap id="transactionResultMap" type="stock.model.dto.TransactionDTO">
+        <id property="code" column="CODE"/>
+        <result property="name" column="MEM_NAME"/>
+        <result property="title" column="STK_NAME"/>
+        <result property="price" column="STK_PRICE"/>
+        <result property="count" column="STK_COUNT"/>
+    </resultMap>
+
+    <insert id="insertMember" parameterType="stock.model.dto.MemDTO">
+        INSERT INTO MEMBER (MEM_ID, MEM_NAME, MEM_MONEY)
+        VALUES (#{id}, #{name}, #{money})
+    </insert>
+
+    <delete id="truncateMember" parameterType="stock.model.dto.MemDTO">
+        TRUNCATE TABLE MEMBER
+    </delete>
+
+    <delete id="truncateTransaction">
+        TRUNCATE TABLE TRANSACTION
+    </delete>
+
+    <select id="viewallStock" resultMap="stockResultMap">
+        SELECT * FROM STOCK
+    </select>
+
+    <select id="showAccount" resultMap="memberResultMap">
+        SELECT * FROM MEMBER
+    </select>
+
+    <update id="addMoney" parameterType="stock.model.dto.MemDTO">
+        UPDATE MEMBER
+        SET MEM_MONEY = MEM_MONEY + #{money}
+        WHERE MEM_ID = #{id}
+    </update>
+
+    <select id="searchStock" resultMap="stockResultMap">
+        SELECT * FROM STOCK
+        WHERE STK_NAME LIKE CONCAT('%', #{title}, '%')
+    </select>
+
+    <select id="showTransaction" resultMap="transactionResultMap">
+        SELECT * FROM TRANSACTION
+    </select>
+
+    <delete id="deleteStock" parameterType="stock.model.dto.StockDTO">
+        DELETE FROM STOCK
+        WHERE STK_NAME = #{title}
+    </delete>
+</mapper>
