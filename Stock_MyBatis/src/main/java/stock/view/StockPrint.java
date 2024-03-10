@@ -14,7 +14,8 @@ public class StockPrint {
             case "insertMember" : successMessage = "내정보 등록 성공"; break;
             case "addMoney" : successMessage = "입금 성공"; break;
             case "buyStock" : successMessage = "매수 성공"; break;
-            case "delete" : successMessage = " 삭제 성공"; break;
+            case "delete" : successMessage = "삭제 성공"; break;
+            case "transactStock" : successMessage = "주식 거래 성공"; break;
         }
 
         System.out.println(successMessage);
@@ -32,6 +33,7 @@ public class StockPrint {
             case "searchStockList" : errorMessage = "주식 조회 실패"; break;
             case "transactionList" : errorMessage = "전체 거래내역 조회 실패"; break;
             case "delete" : errorMessage = "삭제 실패"; break;
+            case "transactStock" : errorMessage = "주식 거래 실패"; break;
         }
 
         System.out.println(errorMessage);

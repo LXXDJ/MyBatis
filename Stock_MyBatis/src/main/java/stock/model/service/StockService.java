@@ -115,4 +115,39 @@ public class StockService {
         return result > 0 ? true : false;
     }
 
+    public MemDTO findMemebr(MemDTO memDTO) {
+        SqlSession sqlSession = getSqlSession();
+        stockDAO = sqlSession.getMapper(StockDAO.class);
+        MemDTO name = stockDAO.findMemebr(memDTO);
+
+        sqlSession.close();
+
+        return name;
+    }
+
+    public StockDTO findPrice(StockDTO stockDTO) {
+        SqlSession sqlSession = getSqlSession();
+        stockDAO = sqlSession.getMapper(StockDAO.class);
+        StockDTO price = stockDAO.findPrice(stockDTO);
+
+        sqlSession.close();
+
+        return price;
+    }
+
+    public boolean transactStock(TransactionDTO transactionDTO) {
+        SqlSession sqlSession = getSqlSession();
+        stockDAO = sqlSession.getMapper(StockDAO.class);
+        int result = stockDAO.transactStock(transactionDTO);
+
+        if(result > 0){
+            sqlSession.commit();
+        }else{
+            sqlSession.rollback();
+        }
+
+        sqlSession.close();
+
+        return result > 0 ? true : false;
+    }
 }

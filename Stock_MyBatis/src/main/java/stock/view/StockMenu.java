@@ -3,6 +3,7 @@ package stock.view;
 import stock.controller.StockController;
 import stock.model.dto.MemDTO;
 import stock.model.dto.StockDTO;
+import stock.model.dto.TransactionDTO;
 
 import java.util.Scanner;
 
@@ -32,10 +33,10 @@ public class StockMenu {
                     continue label;
                 case "3" : stockController.addMoney(updateMoney());
                     continue label;
-//                case "4" : stockController.buyStock(findMember());
-//                    continue label;
-//                case "5" : sellStock();
-//                    continue label;
+                case "4" : stockController.transactStock(buyInfo());
+                    continue label;
+                case "5" : stockController.transactStock(sellInfo());
+                    continue label;
                 case "6" : stockController.searchStock(inputTitle());
                     continue label;
                 case "7" : stockController.showTransaction();
@@ -87,6 +88,66 @@ public class StockMenu {
 
         StockDTO stockDTO = new StockDTO();
         stockDTO.setTitle(title);
+
+        return stockDTO;
+    }
+
+    private TransactionDTO buyInfo() {
+        MemDTO memDTO = findMember();
+        StockDTO stockDTO = findPrice();
+
+        System.out.print("주식 개수 : ");
+        int count = sc.nextInt();
+        sc.nextLine();
+
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setName(memDTO.getName());
+        transactionDTO.setTitle(stockDTO.getTitle());
+        transactionDTO.setPrice(stockDTO.getPrice());
+        transactionDTO.setCount(count);
+
+        return transactionDTO;
+    }
+
+    private TransactionDTO sellInfo() {
+        MemDTO memDTO = findMember();
+        StockDTO stockDTO = findPrice();
+
+        System.out.print("주식 개수 : ");
+        int count = sc.nextInt();
+        sc.nextLine();
+
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setName(memDTO.getName());
+        transactionDTO.setTitle(stockDTO.getTitle());
+        transactionDTO.setPrice(stockDTO.getPrice());
+        transactionDTO.setCount(-count);
+
+        return transactionDTO;
+    }
+
+    private MemDTO findMember() {
+        System.out.print("아이디 입력 : ");
+        String id = sc.nextLine();
+
+        MemDTO memDTO = new MemDTO();
+        memDTO.setId(id);
+
+        MemDTO memName = stockController.findMemebr(memDTO);
+        memDTO.setName(memName.getName());
+
+        return memDTO;
+    }
+
+    private StockDTO findPrice() {
+        System.out.print("주식명 : ");
+        String title = sc.nextLine();
+
+        StockDTO stockDTO = new StockDTO();
+        stockDTO.setTitle(title);
+
+        StockDTO stockPrice = stockController.findPrice(stockDTO);
+        stockDTO.setPrice(stockPrice.getPrice());
 
         return stockDTO;
     }

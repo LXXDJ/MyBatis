@@ -42,6 +42,13 @@
         SELECT * FROM MEMBER
     </select>
 
+    <select id="myTransaction" resultMap="transactionResultMap">
+        SELECT STK_NAME, AVG(STK_PRICE), SUM(STK_COUNT)
+        FROM TRANSACTION
+        WHERE MEM_NAME = #{name}
+        GROUP BY STK_NAME
+    </select>
+
     <update id="addMoney" parameterType="stock.model.dto.MemDTO">
         UPDATE MEMBER
         SET MEM_MONEY = MEM_MONEY + #{money}
@@ -61,4 +68,19 @@
         DELETE FROM STOCK
         WHERE STK_NAME = #{title}
     </delete>
+
+    <select id="findMemebr" resultMap="memberResultMap">
+        SELECT MEM_NAME FROM MEMBER
+        WHERE MEM_ID = #{id}
+    </select>
+
+    <select id="findPrice" resultMap="stockResultMap">
+        SELECT STK_PRICE FROM STOCK
+        WHERE STK_NAME = #{title}
+    </select>
+
+    <insert id="transactStock" parameterType="stock.model.dto.TransactionDTO">
+        INSERT INTO TRANSACTION (MEM_NAME, STK_NAME, STK_PRICE, STK_COUNT)
+        VALUES (#{name}, #{title}, #{price}, #{count})
+    </insert>
 </mapper>

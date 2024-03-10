@@ -6,7 +6,6 @@ import stock.model.dto.TransactionDTO;
 import stock.model.service.StockService;
 import stock.view.StockPrint;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StockController {
@@ -83,6 +82,22 @@ public class StockController {
             stockPrint.printSuccessMessage("delete");
         }else{
             stockPrint.printSuccessMessage("delete");
+        }
+    }
+
+    public MemDTO findMemebr(MemDTO memDTO) {
+        return stockService.findMemebr(memDTO);
+    }
+
+    public StockDTO findPrice(StockDTO stockDTO) {
+        return stockService.findPrice(stockDTO);
+    }
+
+    public void transactStock(TransactionDTO transactionDTO) {
+        if(stockService.transactStock(transactionDTO)){
+            stockPrint.printSuccessMessage("transactStock");
+        }else{
+            stockPrint.printSuccessMessage("transactStock");
         }
     }
 }
