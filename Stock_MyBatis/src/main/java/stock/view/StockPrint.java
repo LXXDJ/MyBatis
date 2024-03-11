@@ -51,6 +51,12 @@ public class StockPrint {
         }
     }
 
+    public void printTransaction(List<StockDTO> myList) {
+        for(StockDTO stock : myList){
+            System.out.println(stock);
+        }
+    }
+
     public void printSearchStockList(List<StockDTO> searchStockList) {
         for(StockDTO stock : searchStockList){
             System.out.println(stock);

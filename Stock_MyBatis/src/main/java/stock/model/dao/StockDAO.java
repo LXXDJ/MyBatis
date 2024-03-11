@@ -16,9 +16,7 @@ public interface StockDAO {
 
     List<StockDTO> viewallStock();
 
-    List<MemDTO> showAccount();
-
-    List<TransactionDTO> myTransaction(TransactionDTO transactionDTO);
+    List<MemDTO> showAccount(MemDTO memDTO);
 
     int addMoney(MemDTO memDTO);
 
@@ -33,4 +31,6 @@ public interface StockDAO {
     StockDTO findPrice(StockDTO stockDTO);
 
     int transactStock(TransactionDTO transactionDTO);
+
+    List<StockDTO> myTransaction(MemDTO memDTO);
 }

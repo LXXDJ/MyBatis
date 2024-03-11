@@ -20,6 +20,11 @@
         <result property="price" column="STK_PRICE"/>
         <result property="count" column="STK_COUNT"/>
     </resultMap>
+    <resultMap id="myTransactionResultMap" type="stock.model.dto.StockDTO">
+        <result property="title" column="STK_NAME"/>
+        <result property="price" column="AVG_PRICE"/>
+        <result property="count" column="SUM_COUNT"/>
+    </resultMap>
 
     <insert id="insertMember" parameterType="stock.model.dto.MemDTO">
         INSERT INTO MEMBER (MEM_ID, MEM_NAME, MEM_MONEY)
@@ -40,12 +45,14 @@
 
     <select id="showAccount" resultMap="memberResultMap">
         SELECT * FROM MEMBER
+        WHERE MEM_ID = #{id}
     </select>
 
-    <select id="myTransaction" resultMap="transactionResultMap">
-        SELECT STK_NAME, AVG(STK_PRICE), SUM(STK_COUNT)
-        FROM TRANSACTION
-        WHERE MEM_NAME = #{name}
+    <select id="myTransaction" resultMap="myTransactionResultMap">
+        SELECT STK_NAME, AVG(STK_PRICE) AVG_PRICE, SUM(STK_COUNT) SUM_COUNT
+        FROM TRANSACTION T
+        JOIN MEMBER M USING (MEM_NAME)
+        WHERE M.MEM_ID = #{id}
         GROUP BY STK_NAME
     </select>
 

@@ -6,6 +6,8 @@ import stock.model.dto.MemDTO;
 import stock.model.dto.StockDTO;
 import stock.model.dto.TransactionDTO;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import static stock.common.Template.getSqlSession;
@@ -53,10 +55,10 @@ public class StockService {
         return stockList;
     }
 
-    public List<MemDTO> showAccount() {
+    public List<MemDTO> showAccount(MemDTO memDTO) {
         SqlSession sqlSession = getSqlSession();
         stockDAO = sqlSession.getMapper(StockDAO.class);
-        List<MemDTO> memList = stockDAO.showAccount();
+        List<MemDTO> memList = stockDAO.showAccount(memDTO);
 
         sqlSession.close();
 
@@ -97,6 +99,16 @@ public class StockService {
         sqlSession.close();
 
         return transactionList;
+    }
+
+    public List<StockDTO> myTransaction(MemDTO memDTO) {
+        SqlSession sqlSession = getSqlSession();
+        stockDAO = sqlSession.getMapper(StockDAO.class);
+        List<StockDTO> myList = stockDAO.myTransaction(memDTO);
+
+        sqlSession.close();
+
+        return myList;
     }
 
     public boolean deleteStock(StockDTO stockDTO) {

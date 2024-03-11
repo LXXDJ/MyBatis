@@ -6,6 +6,7 @@ import stock.model.dto.TransactionDTO;
 import stock.model.service.StockService;
 import stock.view.StockPrint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StockController {
@@ -39,10 +40,14 @@ public class StockController {
         }
     }
 
-    public void showAccount() {
-        List<MemDTO> memList = stockService.showAccount();
+    public void showAccount(MemDTO memDTO) {
+        List<MemDTO> memList = stockService.showAccount(memDTO);
+        List<StockDTO> myList = stockService.myTransaction(memDTO);
 
-        if(memList != null){
+        if(memList != null && myList != null){
+            stockPrint.printAccount(memList);
+            stockPrint.printTransaction(myList);
+        }else if(memList != null && myList == null){
             stockPrint.printAccount(memList);
         }else{
             stockPrint.printErrorMessage("memList");

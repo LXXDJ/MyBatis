@@ -6,25 +6,43 @@ public class StockDTO {
     private int price;
 
     public StockDTO(){}
-    public StockDTO(String title, int price){
-        this.title = title;
-        this.price = price;
-    }
-    public StockDTO(String title, int count, int price){
+
+    public StockDTO(String title, int count, int price) {
         this.title = title;
         this.count = count;
         this.price = price;
     }
 
-    public void setTitle(String title){this.title = title;}
-    public void setCount(int count){this.count = count;}
-    public void setPrice(int price){this.price = price;}
+    public String getTitle() {
+        return title;
+    }
 
-    public String getTitle(){return this.title;}
-    public int getCount(){return this.count;}
-    public int getPrice(){return this.price;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String toString(){
-        return "종목명 : " + this.title + ", 현재가 : " + this.price;
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "StockDTO{" +
+                "title='" + title + '\'' +
+                ", count=" + count +
+                ", price=" + price +
+                '}';
     }
 }

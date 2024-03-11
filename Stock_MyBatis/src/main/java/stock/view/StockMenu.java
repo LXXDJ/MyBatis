@@ -29,7 +29,7 @@ public class StockMenu {
                     break;
                 case "1" : stockController.viewallStock();
                     continue label;
-                case "2" : stockController.showAccount();
+                case "2" : stockController.showAccount(findMember());
                     continue label;
                 case "3" : stockController.addMoney(updateMoney());
                     continue label;
