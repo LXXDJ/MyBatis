@@ -8,16 +8,17 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
+import java.util.PrimitiveIterator;
+
+
 public class Application {
     private static String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static String URL = "jdbc:mysql://localhost/menudb";
-    private static String USER = "ohgiraffers";
+    private static String USERNAME = "ohgiraffers";
     private static String PASSWORD = "ohgiraffers";
 
     public static void main(String[] args) {
-        Environment environment = new Environment("dev", new JdbcTransactionFactory(),
-                                        new PooledDataSource(DRIVER, URL, USER, PASSWORD));
-
+        Environment environment = new Environment("dev", new JdbcTransactionFactory(), new PooledDataSource(DRIVER, URL, USERNAME, PASSWORD));
         Configuration configuration = new Configuration(environment);
         configuration.addMapper(Mapper.class);
 
@@ -25,7 +26,6 @@ public class Application {
         SqlSession sqlSession = sqlSessionFactory.openSession(false);
         Mapper mapper = sqlSession.getMapper(Mapper.class);
         java.util.Date date = mapper.selectSysdate();
-
         System.out.println(date);
 
         sqlSession.close();
