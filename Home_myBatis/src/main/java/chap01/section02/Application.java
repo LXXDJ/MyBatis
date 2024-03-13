@@ -18,11 +18,11 @@ public class Application {
 
             SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
             SqlSession sqlSession = sqlSessionFactory.openSession(false);
-
             java.util.Date date = sqlSession.selectOne("mapper.selectSysdate");
             System.out.println(date);
 
             sqlSession.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
