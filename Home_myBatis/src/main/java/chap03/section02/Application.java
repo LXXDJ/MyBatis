@@ -1,6 +1,5 @@
-package chap03.section01;
+package chap03.section02;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -30,6 +29,7 @@ public class Application {
             }
 
         }while (true);
+
     }
 
     private static int inputMenuCode() {

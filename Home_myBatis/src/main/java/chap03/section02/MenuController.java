@@ -1,10 +1,10 @@
-package chap03.section01;
+package chap03.section02;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
 public class MenuController {
+
     private final MenuService menuService;
     private final PrintResult printResult;
 
@@ -18,41 +18,41 @@ public class MenuController {
         if(menuList != null){
             printResult.selectAllMenu(menuList);
         }else{
-            printResult.printErrorMessage("selectAllMenu");
+            printResult.printError("selectAllMenu");
         }
     }
 
     public void selectMenuByCode(int index) {
-        MenuDTO menu = menuService.selectMenuByCode(index);
+        MenuDTO menuDTO = menuService.selectMenuByCode(index);
 
-        if(menu != null){
-            printResult.selectMenuByCode(menu);
+        if(menuDTO != null){
+            printResult.selectMenuByCode(menuDTO);
         }else{
-            printResult.printErrorMessage("selectMenuByCode");
+            printResult.printError("selectMenuByCode");
         }
     }
 
     public void registMenu(Map<String, String> parameter) {
         if(menuService.registMenu(parameter)){
-            printResult.printSuccessMessage("registMenu");
+            printResult.printSuccess("registMenu");
         }else{
-            printResult.printErrorMessage(("registMenu"));
+            printResult.printError("registMenu");
         }
     }
 
     public void modifyMenu(MenuDTO menuDTO) {
         if(menuService.modifyMenu(menuDTO)){
-            printResult.printSuccessMessage("modifyMenu");
+            printResult.printSuccess("modifyMenu");
         }else{
-            printResult.printErrorMessage("modifyMenu");
+            printResult.printError("modifyMenu");
         }
     }
 
     public void deleteMenu(int index) {
         if(menuService.deleteMenu(index)){
-            printResult.printSuccessMessage("deleteMenu");
+            printResult.printSuccess("deleteMenu");
         }else{
-            printResult.printErrorMessage("deleteMenu");
+            printResult.printError("deleteMenu");
         }
     }
 }
