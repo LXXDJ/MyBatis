@@ -1,4 +1,4 @@
-package chap04.sect01;
+package chap04;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -12,7 +12,7 @@ public class Template {
     private static SqlSessionFactory sqlSessionFactory;
     public static SqlSession getSqlSession(){
         if(sqlSessionFactory == null){
-            String resource = "chap04.sect01.config/mybatis-config.xml";
+            String resource = "config/mybatis-config.xml";
             try {
                 InputStream inputStream = Resources.getResourceAsStream(resource);
                 sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);

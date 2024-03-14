@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chap04.DynamicSqlMapper">
+    <resultMap id="menuResultMap" type="chap04.MenuDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+    </resultMap>
+
+    <select id="selectMenuByPrice" resultMap="menuResultMap">
+        SELECT * FROM TBL_MENU WHERE ORDERABLE_STATUS = 'Y'
+        <if test="price gte 0 and price lte 10000">
+            <![CDATA[ AND MENU_PRICE < #{price} ]]>
+        </if>
+        <if test="price gt 10000 and price lte 20000">
+            AND MENU_PRICE BETWEEN 10000 AND #{price}
+        </if>
+        <if test="price gt 20000 and price lte 30000">
+            AND MENU_PRICE BETWEEN 20000 AND #{price}
+        </if>
+        <if test="price gt 30000">
+            AND MENU_PRICE BETWEEN 30000 AND #{price}
+        </if>
+    </select>
+    <select id="searchMenu" resultMap="menuResultMap">
+        SELECT * FROM TBL_MENU A
+        <if test="condition.equals('category')">
+            JOIN TBL_CATEGORY B USING (CATEGORY_CODE)
+        </if>
+        WHERE ORDERABLE_STATUS = 'Y'
+        <if test="condition.equals('category')">
+            AND B.CATEGORY_NAME LIKE CONCAT('%', #{value}, '%')
+        </if>
+        <if test="condition.equals('name')">
+            AND A.MENU_NAME LIKE CONCAT('%', #{value}, '%')
+        </if>
+    </select>
+    <select id="chooseSubMenu" resultMap="menuResultMap">
+        SELECT * FROM TBL_MENU A
+        JOIN TBL_CATEGORY B USING (CATEGORY_CODE)
+        WHERE ORDERABLE_STATUS = 'Y'
+        <choose>
+            <when test="category.equals('식사')">
+                AND B.REF_CATEGORY_CODE = 1
+            </when>
+            <when test="category.equals('음료')">
+                AND B.REF_CATEGORY_CODE = 2
+            </when>
+            <otherwise>
+                AND B.REF_CATEGORY_CODE = 3
+            </otherwise>
+        </choose>
+    </select>
+    <select id="foreachSubMenu" resultMap="menuResultMap">
+        SELECT * FROM TBL_MENU WHERE MENU_CODE IN
+        <foreach collection="randomCodeList" item="randomCode" open="(" separator=", " close=")">
+            #{randomCode}
+        </foreach>
+    </select>
+
+    <update id="modifyMenu">
+        UPDATE TBL_MENU
+        <set>
+            <if test="name != null and name != ''">
+                MENU_NAME = #{name}
+            </if>
+            <if test="price gt 0 and price != null">
+                , MENU_PRICE = #{price}
+            </if>
+            <if test="categoryCode gt 0 and categoryCode != null">
+                , CATEGORY_CODE = #{categoryCode}
+            </if>
+            <if test="order != null and !order.equals('')">
+                , ORDERABLE_STATUS = #{order}
+            </if>
+        </set>
+        WHERE MENU_CODE = #{code}
+    </update>
+</mapper>

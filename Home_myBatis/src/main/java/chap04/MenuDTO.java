@@ -1,4 +1,4 @@
-package chap04.sect01;
+package chap04;
 
 import java.io.Serializable;
 

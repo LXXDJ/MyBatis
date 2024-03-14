@@ -1,4 +1,4 @@
-package chap04.sect01;
+package chap04;
 
 public class SearchCriteria {
     private String condition;
