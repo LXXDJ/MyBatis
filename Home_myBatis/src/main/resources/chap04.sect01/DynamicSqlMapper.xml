@@ -20,9 +20,6 @@
             <if test="price != '' and price != null">
                 MENU_PRICE = #{price}
             </if>
-            <if test="categoryCode != '' and categoryCode != null">
-                CATEGORY_CODE = #{categoryCode}
-            </if>
             <if test="orderableStatus != '' and orderableStatus != null">
                 ORDERABLE_STATUS = #{orderableStatus}
             </if>

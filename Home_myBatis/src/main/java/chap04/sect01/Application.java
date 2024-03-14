@@ -38,8 +38,7 @@ public class Application {
         int price = sc.nextInt();
         sc.nextLine();
 //        System.out.print("변경할 카테고리 코드 입력 : ");
-//        int categoryCode = sc.nextInt();
-//        sc.nextLine();
+//        int categoryCode = Integer.parseInt(sc.nextLine());
         System.out.print("판매여부 입력(Y/N) : ");
         String order = sc.nextLine();
 
