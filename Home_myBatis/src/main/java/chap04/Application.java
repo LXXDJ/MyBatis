@@ -57,9 +57,9 @@ public class Application {
             sc.nextLine();
 
             switch (no){
-//                case 1 : menuService.searchMenuByCodeOrSearchAll(inputAllOrOne()); break;
-//                case 2 : menuService.searchMenuByNameOrCategory(inputSearchCriteriaMap()); break;
-//                case 3 : menuService.modifyMenu(inputChangeInfo()); break;
+                case 1 : menuService.searchMenuByCodeOrSearchAll(inputAllOrOne()); break;
+                case 2 : menuService.searchMenuByNameOrCategory(inputSearchCriteriaMap()); break;
+                case 3 : menuService.modifyMenu(inputChangeInfo()); break;
                 case 9 : return;
             }
 
@@ -116,25 +116,70 @@ public class Application {
         return code;
     }
 
-//    private static Map<String, String> inputChangeInfo() {
-//        System.out.print("변경할 메뉴 코드 입력 : ");
-//        String code = sc.nextLine();
-//        System.out.print("변경할 메뉴 이름 입력 : ");
-//        String name = sc.nextLine();
-//        System.out.print("변경할 메뉴 가격 입력 : ");
-//        String price = sc.nextLine();
-//        System.out.print("변경할 카테고리 코드 입력 : ");
-//        String categoryCode = sc.nextLine();
-//        System.out.print("판매여부 입력(Y/N) : ");
-//        String order = sc.nextLine();
-//
-//        Map<String, String> parameter = new HashMap<>();
-//        parameter.put("code", code);
-//        parameter.put("name", name);
-//        parameter.put("price", price);
-//        parameter.put("categoryCode", categoryCode);
-//        parameter.put("order", order);
-//
-//        return parameter;
-//    }
+    private static SearchCriteria inputAllOrOne() {
+        System.out.print("검색 조건 입력 여부 (예/아니오) : ");
+        String answer = sc.nextLine();
+
+        SearchCriteria searchCriteria = new SearchCriteria();
+
+        if(answer.equals("예")){
+            System.out.print("검색할 메뉴코드 입력 : ");
+            String code = sc.nextLine();
+
+            searchCriteria.setCondition("menuCode");
+            searchCriteria.setValue(code);
+        }
+
+        return searchCriteria;
+    }
+
+    private static Map<String, Object> inputSearchCriteriaMap() {
+        System.out.print("검색 조건 입력(category / name / both / null) : ");
+        String condition = sc.nextLine();
+
+        Map<String, Object> search = new HashMap<>();
+        if(condition.equals("category")){
+            System.out.print("검색할 카테고리 코드 입력 : ");
+            int categoryValue = Integer.parseInt(sc.nextLine());
+
+            search.put("categoryValue", categoryValue);
+        }else if(condition.equals("name")){
+            System.out.print("검색할 이름 입력 : ");
+            String nameValue = sc.nextLine();
+
+            search.put("nameValue", nameValue);
+        }else if(condition.equals("both")){
+            System.out.print("검색할 이름 입력 : ");
+            String nameValue = sc.nextLine();
+            System.out.print("검색할 카테고리 코드 입력 : ");
+            int categoryValue = Integer.parseInt(sc.nextLine());
+
+            search.put("nameValue", nameValue);
+            search.put("categoryValue", categoryValue);
+        }
+        return search;
+    }
+
+    private static Map<String, String> inputChangeInfo() {
+        System.out.print("변경할 메뉴 코드 입력 : ");
+        String code = sc.nextLine();
+
+        System.out.print("변경할 메뉴 이름 입력 : ");
+        String name = sc.nextLine().trim();
+        System.out.print("변경할 메뉴 가격 입력 : ");
+        String price = sc.nextLine().trim();
+        System.out.print("변경할 카테고리 코드 입력 : ");
+        String categoryCode = sc.nextLine().trim();
+        System.out.print("판매여부 입력(Y/N) : ");
+        String order = sc.nextLine().trim();
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("code", code);
+        parameter.put("name", name);
+        parameter.put("price", price);
+        parameter.put("categoryCode", categoryCode);
+        parameter.put("order", order);
+
+        return parameter;
+    }
 }

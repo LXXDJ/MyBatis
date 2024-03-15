@@ -57,11 +57,28 @@
     </select>
     <select id="foreachSubMenu" resultMap="menuResultMap">
         SELECT * FROM TBL_MENU WHERE MENU_CODE IN
-        <foreach collection="randomCodeList" item="randomCode" open="(" separator=", " close=")">
+        <foreach collection="set" item="randomCode" open="(" separator=", " close=")">
             #{randomCode}
         </foreach>
     </select>
-
+    <select id="searchMenuByCodeOrSearchAll" resultMap="menuResultMap">
+        SELECT * FROM TBL_MENU
+<!--        <if test="condition != null and condition.equals('menuCode')">-->
+        <if test=" 'menuCode'.equals(condition) ">
+            WHERE MENU_CODE = #{value}
+        </if>
+    </select>
+    <select id="searchMenuByNameOrCategory" resultMap="menuResultMap">
+        SELECT * FROM TBL_MENU
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="nameValue != null">
+                MENU_NAME LIKE CONCAT ('%', #{nameValue}, '%')
+            </if>
+            <if test="categoryValue != null">
+                AND CATEGORY_CODE = #{categoryValue}
+            </if>
+        </trim>
+    </select>
     <update id="modifyMenu">
         UPDATE TBL_MENU
         <set>
@@ -74,7 +91,7 @@
             <if test="categoryCode gt 0 and categoryCode != null">
                 , CATEGORY_CODE = #{categoryCode}
             </if>
-            <if test="order != null and !order.equals('')">
+            <if test="order != null and order != ''">
                 , ORDERABLE_STATUS = #{order}
             </if>
         </set>
