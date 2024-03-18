@@ -161,24 +161,40 @@ public class Application {
     }
 
     private static Map<String, String> inputChangeInfo() {
-        System.out.print("변경할 메뉴 코드 입력 : ");
-        String code = sc.nextLine();
-
-        System.out.print("변경할 메뉴 이름 입력 : ");
-        String name = sc.nextLine().trim();
-        System.out.print("변경할 메뉴 가격 입력 : ");
-        String price = sc.nextLine().trim();
-        System.out.print("변경할 카테고리 코드 입력 : ");
-        String categoryCode = sc.nextLine().trim();
-        System.out.print("판매여부 입력(Y/N) : ");
-        String order = sc.nextLine().trim();
-
         Map<String, String> parameter = new HashMap<>();
-        parameter.put("code", code);
-        parameter.put("name", name);
-        parameter.put("price", price);
-        parameter.put("categoryCode", categoryCode);
-        parameter.put("order", order);
+
+        label1: while(true){
+            System.out.print("변경할 메뉴 코드 입력 : ");
+            String code = sc.nextLine().trim();
+
+            if(code == null || code.length() == 0) continue label1;
+
+            parameter.put("code", code);
+            break;
+        }
+
+        label2: while(true){
+            System.out.print("변경할 메뉴 이름 입력 : ");
+            String name = sc.nextLine().trim();
+            System.out.print("변경할 메뉴 가격 입력 : ");
+            String price = sc.nextLine().trim();
+            System.out.print("변경할 카테고리 코드 입력 : ");
+            String categoryCode = sc.nextLine().trim();
+            System.out.print("판매여부 입력(Y/N) : ");
+            String order = sc.nextLine().trim();
+
+            if((name == null || name.isEmpty()) && (price == null || price.isEmpty()) && (categoryCode == null || categoryCode.isEmpty()) && (order == null || order.isEmpty())){
+                System.out.println("최소 1개 이상의 정보를 입력해야합니다.");
+                continue label2;
+            }
+
+            parameter.put("name", name);
+            parameter.put("price", price);
+            parameter.put("categoryCode", categoryCode);
+            parameter.put("order", order);
+
+            break;
+        }
 
         return parameter;
     }

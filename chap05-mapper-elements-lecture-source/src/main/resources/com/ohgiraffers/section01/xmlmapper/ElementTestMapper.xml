@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ohgiraffers.section01.xmlmapper.ElementTestMapper">
-    <cache eviction="LRU" flushInterval="1000" size="512" readOnly="ture"/>
+    <cache eviction="LRU" flushInterval="1000" size="512" readOnly="true"/>
 
     <select id="selectCacheTest" resultType="java.lang.String">
         SELECT MENU_NAME
@@ -91,7 +91,7 @@
         </association>
     </resultMap>
     <select id="selectResultMapAssociationTest" resultMap="menuAndCategoryResultMap">
-        SELECT A.MENU_CODE, A.MENU_NAME, A.MENU_PRICE, B.CATEGORY_CODE, B. CATEGORY_NAME, B.REF_CATEGORY_CODE, A.ORDERABLE_STATUS
+        SELECT A.MENU_CODE, A.MENU_NAME, A.MENU_PRICE, B.CATEGORY_CODE, B.CATEGORY_NAME, B.REF_CATEGORY_CODE, A.ORDERABLE_STATUS
         FROM TBL_MENU A JOIN TBL_CATEGORY B USING (CATEGORY_CODE)
         WHERE A.ORDERABLE_STATUS = 'Y'
     </select>
@@ -146,13 +146,13 @@
         [공통 속성]
         - id : 매핑 구문 구분
         - parameterType : 파라미터 타입 지정. 이미 정의된 별칭 사용 또는 클래스의 full-name 사용
-        - flushCashe : 매핑 구문을 실행할 때 캐시 삭제 여부 설정
+        - flushCache : 매핑 구문을 실행할 때 캐시 삭제 여부 설정
         - timeout : sql 실행 후 응답을 기다리는 최대 시간. 보통은 설정하지 않고 JDBC 드라이버 자체 타임아웃 값을 그대로 사용
         - statementType : JDBC 구문 타입 지정. STATEMENT, PREPARED, CALLABLE 중 하나 사용 가능. 기본값은 PREPARED
         [추가 속성]
         - useGenerateKeys : 생성 키 값을 만들기 위해 JDBC의 getGenerateKeys 메소드를 호출할지 결정. 기본값은 false
         - KeyProperty : insert 구문의 하위 엘리먼트인 selectKey 엘리먼트에 의한 반환값을 설정할 property 지정
-        - KeyColumn : 생성 키를 가진 테이블의 컬러명 설정 (키 컬럼이 테이블의 첫번째 행이 아닌 DB에서만 필요하다. - PostgreSQL 제외)
+        - KeyColumn : 생성 키를 가진 테이블의 컬럼명 설정 (키 컬럼이 테이블의 첫번째 행이 아닌 DB에서만 필요하다. - PostgreSQL 제외)
     -->
     <insert id="insertNewCategory">
         INSERT INTO TBL_CATEGORY (CATEGORY_NAME)

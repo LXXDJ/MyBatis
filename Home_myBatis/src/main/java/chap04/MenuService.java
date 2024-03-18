@@ -65,11 +65,11 @@ public class MenuService {
         SqlSession sqlSession = getSqlSession();
         dynamicSqlMapper = sqlSession.getMapper(DynamicSqlMapper.class);
 
-        List<MenuDTO> menuList = dynamicSqlMapper.foreachSubMenu(code);
+//        List<MenuDTO> menuList = dynamicSqlMapper.foreachSubMenu(code);
 
-//        Map<String, Set<Integer>> randomCode = new HashMap<>();
-//        randomCode.put("randomCodeList", code);
-//        List<MenuDTO> menuList = dynamicSqlMapper.foreachSubMenu(randomCode);
+        Map<String, Set<Integer>> randomCode = new HashMap<>();
+        randomCode.put("randomCodeList", code);
+        List<MenuDTO> menuList = dynamicSqlMapper.foreachSubMenu(randomCode);
 
         if(menuList != null && !menuList.isEmpty()){
             for(MenuDTO menu : menuList){

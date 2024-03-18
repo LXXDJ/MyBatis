@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chap05.xmlmapper.TestMapper">
+
+    <cache eviction="LRU" flushInterval="1000" size="512" readOnly="ture"/>
+    <select id="selectCacheTest" resultType="java.lang.String">
+        SELECT MENU_NAME FROM TBL_MENU
+    </select>
+
+    <!-- extends : 상속의 개념. 추가 확장하는 경우 사용
+         부모(menuResultMap)를 resultMap으로 설정할 경우, 본인의 컬럼만 출력
+         자식(orderResultMap)을 resultMap으로 설정할 경우, 확장된 컬럼까지 모두 포함하여 출력 -->
+    <resultMap id="menuResultMap" type="chap05.common.MenuDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+    </resultMap>
+    <resultMap id="orderResultMap" type="chap05.common.MenuDTO" extends="menuResultMap">
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+    </resultMap>
+    <select id="selectResultMapTest" resultMap="orderResultMap">
+        SELECT * FROM TBL_MENU
+    </select>
+
+    <!-- constructor : 요소의 순서, 타입, 개수 모두 일치 필수 -->
+    <resultMap id="constructorResultMap" type="chap05.common.MenuDTO">
+        <constructor>
+            <idArg column="MENU_CODE" javaType="_int"/>
+            <arg column="MENU_NAME" javaType="string"/>
+            <arg column="MENU_PRICE" javaType="_int"/>
+            <arg column="CATEGORY_CODE" javaType="_int"/>
+            <arg column="ORDERABLE_STATUS" javaType="string"/>
+        </constructor>
+    </resultMap>
+    <select id="selectResultMapConstructorTest" resultMap="constructorResultMap">
+        SELECT * FROM TBL_MENU
+    </select>
+
+    <!-- association : DTO에 다른 DTO가 포함되어 있을 경우 -->
+    <resultMap id="menuAndCategoryResultMap" type="chap05.common.MenuAndCategoryDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+        <association property="category" resultMap="categoryResultMap"/>
+    </resultMap>
+    <resultMap id="categoryResultMap" type="chap05.common.CategoryDTO">
+        <id property="category_code" column="CATEGORY_CODE"/>
+        <result property="category_name" column="CATEGORY_NAME"/>
+        <result property="ref_category_code" column="REF_CATEGORY_CODE"/>
+    </resultMap>
+    <resultMap id="associationResultMap" type="chap05.common.MenuAndCategoryDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+        <association property="category" javaType="chap05.common.CategoryDTO">
+            <id property="category_code" column="CATEGORY_CODE"/>
+            <result property="category_name" column="CATEGORY_NAME"/>
+            <result property="ref_category_code" column="REF_CATEGORY_CODE"/>
+        </association>
+    </resultMap>
+    <select id="selectResultMapAssociationTest" resultMap="associationResultMap">
+        SELECT M.MENU_CODE, M.MENU_NAME, M.MENU_PRICE, M.ORDERABLE_STATUS, C.CATEGORY_CODE, C.CATEGORY_NAME, C.REF_CATEGORY_CODE
+        FROM TBL_MENU M JOIN TBL_CATEGORY C USING (CATEGORY_CODE)
+    </select>
+
+    <!-- collection -->
+    <resultMap id="categoryAndMenuResultMap" type="chap05.common.CategoryAndMenuDTO">
+        <id property="category_code" column="CATEGORY_CODE"/>
+        <result property="category_name" column="CATEGORY_NAME"/>
+        <result property="ref_category_code" column="REF_CATEGORY_CODE"/>
+        <collection property="menuList" resultMap="menuResultMap1"/>
+    </resultMap>
+    <resultMap id="menuResultMap1" type="chap05.common.MenuDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+    </resultMap>
+    <resultMap id="collectionResultMap" type="chap05.common.CategoryAndMenuDTO">
+        <id property="category_code" column="CATEGORY_CODE"/>
+        <result property="category_name" column="CATEGORY_NAME"/>
+        <result property="ref_category_code" column="REF_CATEGORY_CODE"/>
+        <collection property="menuList" ofType="chap05.common.MenuDTO">
+            <id property="code" column="MENU_CODE"/>
+            <result property="name" column="MENU_NAME"/>
+            <result property="price" column="MENU_PRICE"/>
+            <result property="categoryCode" column="CATEGORY_CODE"/>
+            <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+        </collection>
+    </resultMap>
+    <select id="selectResultMapCollectionTest" resultMap="collectionResultMap">
+        SELECT C.CATEGORY_CODE, C.CATEGORY_NAME, C.REF_CATEGORY_CODE, M.MENU_CODE, M.MENU_NAME, M.MENU_PRICE, M.CATEGORY_CODE, M.ORDERABLE_STATUS
+        FROM TBL_CATEGORY C LEFT JOIN TBL_MENU M USING (CATEGORY_CODE)
+    </select>
+
+    <!-- sql 엘리먼트 : 공통으로 사용할 sql 문자열 부분을 정의하여 재사용 -->
+    <sql id="columns">MENU_CODE, MENU_NAME, MENU_PRICE, CATEGORY_CODE, ORDERABLE_STATUS</sql>
+    <sql id="menu">FROM TBL_MENU</sql>
+    <select id="selectSqlTest" resultMap="orderResultMap">
+        SELECT <include refid="columns"/> <include refid="menu"/>
+    </select>
+
+    <!-- selectKey : AUTO_INCREMENT 값을 가진 컬럼의 값을 가져올수 있다. -->
+    <insert id="insertCategory">
+        INSERT INTO TBL_CATEGORY (CATEGORY_NAME)
+        VALUES (#{category.category_name})
+    </insert>
+    <insert id="insertMenu">
+        <selectKey keyProperty="category.category_code" order="BEFORE" resultType="_int">
+            SELECT AUTO_INCREMENT-1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_SCHEMA = 'menudb'
+            AND TABLE_NAME = 'tbl_category'
+        </selectKey>
+        INSERT INTO TBL_MENU (MENU_NAME, MENU_PRICE, CATEGORY_CODE, ORDERABLE_STATUS)
+        VALUES (#{name}, #{price}, #{category.category_code}, #{orderableStatus})
+    </insert>
+</mapper>

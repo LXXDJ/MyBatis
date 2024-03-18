@@ -57,7 +57,7 @@
     </select>
     <select id="foreachSubMenu" resultMap="menuResultMap">
         SELECT * FROM TBL_MENU WHERE MENU_CODE IN
-        <foreach collection="set" item="randomCode" open="(" separator=", " close=")">
+        <foreach collection="randomCodeList" item="randomCode" open="(" separator=", " close=")">
             #{randomCode}
         </foreach>
     </select>
