@@ -21,10 +21,14 @@ public interface MenuMapper {
     @ResultMap("menuResultMap")
     MenuDTO selectMenuByCode(int index);
 
-    @Insert("INSERT INTO TBL_MENU (MENU_NAME, MENU_PRICE, CATEGORY_CODE, ORDERABLE_STATUS) VALUES (#{menuName}, #{menuPrice}, #{categoryCode}, 'Y')")
+    @Insert("INSERT INTO TBL_MENU (MENU_NAME, MENU_PRICE, CATEGORY_CODE, ORDERABLE_STATUS)\n" +
+            "VALUES (#{menuName}, #{menuPrice}, #{categoryCode}, 'Y')")
     int registMenu(Map<String, String> parameter);
 
-    @Update("UPDATE TBL_MENU SET MENU_NAME = #{name}, MENU_PRICE = #{price}, CATEGORY_CODE = #{categoryCode}, ORDERABLE_STATUS = #{orderableStatus} WHERE MENU_CODE = #{code}")
+    @Update("UPDATE TBL_MENU\n" +
+            "SET MENU_NAME = #{name}, MENU_PRICE = #{price},\n" +
+            "CATEGORY_CODE = #{categoryCode}, ORDERABLE_STATUS = #{orderableStatus}\n" +
+            "WHERE MENU_CODE = #{code}")
     int modifyMenu(MenuDTO menuDTO);
 
     @Delete("DELETE FROM TBL_MENU WHERE MENU_CODE = #{code}")
